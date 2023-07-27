@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-pip install git+https://github.com/databricks-industry-solutions/dbignite.git@main
+pip install git+https://github.com/willsmithDB/dbignite-FHIR.git@feature-FHIR-schema-dbignite-HLSSA-296
 
 # COMMAND ----------
 

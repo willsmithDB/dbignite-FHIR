@@ -9,6 +9,8 @@ from dbignite.omop.data_model import *
 from dbignite.omop.utils import *
 from dbignite.omop.schemas import *
 
+from databricks.sdk.runtime import *
+
 REPO = os.environ.get("REPO", "dbignite")
 BRANCH = re.sub(r"\W+", "", os.environ.get("BRANCH", "local_test"))
 
