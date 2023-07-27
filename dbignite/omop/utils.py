@@ -1,11 +1,14 @@
 import json
+import subprocess
+
 from copy import deepcopy
 
 from pyspark.sql import DataFrame
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
-from dbignite.schemas import ENTRY_SCHEMA
+from dbignite.omop.schemas import ENTRY_SCHEMA
 
+from databricks.sdk.runtime import *
 
 # TODO Add Type Hinting
 # TODO change to transform
@@ -366,3 +369,29 @@ def summarize_encounter(encounter_df: DataFrame) -> DataFrame:
             collect_list("encounter").alias("encounters"),
         )
     )
+
+## Process to save spark_schemas to local (schema_path) for use with FHIR mapping. Depedency on json2spark - need updates. 
+
+def save_FHIR_schemas(schema_path_name: str = "schema"):
+  schema_path_name = schema_path_name
+  subprocess.run(["mkdir", "-p", schema_path_name], capture_output=True, text=True, input="y")
+
+  count = 0
+
+  for item in dbutils.fs.ls("dbfs:/user/hive/warehouse/json2spark-schema/spark_schemas/"):
+      patient_schema = None
+      file_location = "/tmp/" + item.name
+      dbutils.fs.cp(
+          "dbfs:/user/hive/warehouse/json2spark-schema/spark_schemas/" + item.name,
+          "file://" + file_location,
+      )
+      with open(file_location) as new_file:
+          patient_schema = json.load(new_file)
+      with open(schema_path_name + "/" + item.name, "w") as new_file:
+          new_file.write(json.dumps(patient_schema, indent = 4) )
+      dbutils.fs.rm("./" + item.name)
+      count += 1
+      if count % 10 == 0:
+        print("Progress: Successfully saved " + str(count) + " records.")
+        
+  return count

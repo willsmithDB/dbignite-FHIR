@@ -37,7 +37,6 @@ explicit = spark.createDataFrame([abe], schema)
 
 # COMMAND ----------
 
-
 #birth dates match
 explicit.select("birthdate").show(truncate=False)
 
@@ -71,7 +70,3 @@ custom_array_fhir_resource_map = FhirSchemaModel.custom_fhir_resource_mapping(["
 # COMMAND ----------
 
 print(custom_array_fhir_resource_map.list_keys())
-
-# COMMAND ----------
-
-
