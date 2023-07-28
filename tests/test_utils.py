@@ -8,8 +8,7 @@ from chispa.schema_comparer import *
 from dbignite.omop.data_model import *
 from dbignite.omop.utils import *
 from dbignite.omop.schemas import *
-
-from databricks.sdk.runtime import *
+from dbignite.fhir_mapping_model import FhirSchemaModel
 
 REPO = os.environ.get("REPO", "dbignite")
 BRANCH = re.sub(r"\W+", "", os.environ.get("BRANCH", "local_test"))
@@ -41,17 +40,54 @@ def cdm_model():
 
 
 class TestMappings:
-    def test_save_FHIR_schemas(self):
-        schema_path_name = "TEST_SCHEMAS"
-        records_saved = save_FHIR_schemas(schema_path_name)
 
-        print("Schemas saved successfully. Number of schemas = " + str(records_saved))
+    def test_default_fhir_schema_model_count():
+        fhir_mapped_model = FhirSchemaModel()
         assert (
-            records_saved >= 157
-        ), f"Expected at least 157 FHIR resources, actual number saved: {records_saved}"
+            len(fhir_mapped_model.list_keys()) >= 157
+        ), f"Resource Count Error: Expected at least 157 FHIR resources saved in the mapping, actual number mapped: {len(fhir_mapped_model.list_keys())}"
+        return True
+    
+    def test_us_core_fhir_schema_model_count():
+        us_core_fhir_mapped_model = FhirSchemaModel.us_core_fhir_resource_mapping()
+        assert (
+            len(us_core_fhir_mapped_model.list_keys()) == 26
+        ), f"Resource Count Error: Expected 26 FHIR resources saved in the mapping, actual number mapped: {len(us_core_fhir_mapped_model.list_keys())}"
+        return True
+      
+    def test_custom_fhir_schema_model_count(resource_list: list[str]):
+        assert(type(resource_list) == list), f"Resource List Error: Expected a list and received: {type(resource_list).__name__}"
+        for resource in resource_list:
+          assert(type(resource) == str),  f"Resource Error: Expected a list of strings and received an item of type: {type(resource).__name__}"
+        custom_fhir_mapped_model = FhirSchemaModel.custom_fhir_resource_mapping(resource_list)
+        assert (
+            len(custom_fhir_mapped_model.list_keys()) == len(resource_list)
+        ), f"Expected %i FHIR resources saved in the mapping, actual number mapped: {len(custom_fhir_mapped_model.list_keys())}"
+        return True
+    
+     def test_fhir_schema_model_resource_types(mapping: dict[str, StructType]):
+        for key in mapping.keys():
+          assert (
+              type(mapping[key]) == StructType
+          ), f"Resource Type Error: Expected StructType and received a resource of type: {type(mapping[key]).__name__}"
+        for resource in mapping:
+          assert (
+              type(resource) == str
+          ), f"Resource Type Error: Expected string and received a resource of type: {type(resource).__name__}"
+        return True
+
+    # Pending dependency within CICD 
+    # def test_save_FHIR_schemas(self):
+    #     schema_path_name = "TEST_SCHEMAS"
+    #     records_saved = save_FHIR_schemas(schema_path_name)
+
+    #     print("Schemas saved successfully. Number of schemas = " + str(records_saved))
+    #     assert (
+    #         records_saved >= 157
+    #     ), f"Expected at least 157 FHIR resources, actual number saved: {records_saved}"
         
-        print("All records saved successfully. Removing test directory.")
-        print(subprocess.run(["rm", "-rf", schema_path_name], capture_output=True))
+    #     print("All records saved successfully. Removing test directory.")
+    #     print(subprocess.run(["rm", "-rf", schema_path_name], capture_output=True))
 
 
 class TestUtils:
