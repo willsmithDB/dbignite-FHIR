@@ -46,6 +46,7 @@ class TestMappings:
         assert (
             len(fhir_mapped_model.list_keys()) >= 157
         ), f"Resource Count Error: Expected at least 157 FHIR resources saved in the mapping, actual number mapped: {len(fhir_mapped_model.list_keys())}"
+        print("Test default count: Passed")
         return True
     
     def test_us_core_fhir_schema_model_count(self):
@@ -53,6 +54,7 @@ class TestMappings:
         assert (
             len(us_core_fhir_mapped_model.list_keys()) == 26
         ), f"Resource Count Error: Expected 26 FHIR resources saved in the mapping, actual number mapped: {len(us_core_fhir_mapped_model.list_keys())}"
+        print("Test us_core count: Passed")
         return True
       
     def test_custom_fhir_schema_model_count(self, resource_list: list[str]):
@@ -63,6 +65,7 @@ class TestMappings:
         assert (
             len(custom_fhir_mapped_model.list_keys()) == len(resource_list)
         ), f"Expected %i FHIR resources saved in the mapping, actual number mapped: {len(custom_fhir_mapped_model.list_keys())}"
+        print("Test custom mapping count: Passed")
         return True
     
     def test_fhir_schema_model_resource_types(self, mapping: dict[str, StructType]):
@@ -74,6 +77,7 @@ class TestMappings:
           assert (
               type(resource) == str
           ), f"Resource Type Error: Expected string and received a resource of type: {type(resource).__name__}"
+        print("Test FHIR resource typing validation: Passed")
         return True
 
     # Pending dependency within CICD 
