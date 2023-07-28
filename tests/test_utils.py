@@ -41,21 +41,21 @@ def cdm_model():
 
 class TestMappings:
 
-    def test_default_fhir_schema_model_count():
+    def test_default_fhir_schema_model_count(self):
         fhir_mapped_model = FhirSchemaModel()
         assert (
             len(fhir_mapped_model.list_keys()) >= 157
         ), f"Resource Count Error: Expected at least 157 FHIR resources saved in the mapping, actual number mapped: {len(fhir_mapped_model.list_keys())}"
         return True
     
-    def test_us_core_fhir_schema_model_count():
+    def test_us_core_fhir_schema_model_count(self):
         us_core_fhir_mapped_model = FhirSchemaModel.us_core_fhir_resource_mapping()
         assert (
             len(us_core_fhir_mapped_model.list_keys()) == 26
         ), f"Resource Count Error: Expected 26 FHIR resources saved in the mapping, actual number mapped: {len(us_core_fhir_mapped_model.list_keys())}"
         return True
       
-    def test_custom_fhir_schema_model_count(resource_list: list[str]):
+    def test_custom_fhir_schema_model_count(self, resource_list: list[str]):
         assert(type(resource_list) == list), f"Resource List Error: Expected a list and received: {type(resource_list).__name__}"
         for resource in resource_list:
           assert(type(resource) == str),  f"Resource Error: Expected a list of strings and received an item of type: {type(resource).__name__}"
@@ -65,7 +65,7 @@ class TestMappings:
         ), f"Expected %i FHIR resources saved in the mapping, actual number mapped: {len(custom_fhir_mapped_model.list_keys())}"
         return True
     
-     def test_fhir_schema_model_resource_types(mapping: dict[str, StructType]):
+    def test_fhir_schema_model_resource_types(self, mapping: dict[str, StructType]):
         for key in mapping.keys():
           assert (
               type(mapping[key]) == StructType
