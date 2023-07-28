@@ -40,18 +40,22 @@ testing.test_custom_fhir_schema_model_count(custom_mapping)
 
 # COMMAND ----------
 
-default_mapping = FhirSchemaModel().fhir_resource_map
-us_core_mapping = FhirSchemaModel.us_core_fhir_resource_mapping().fhir_resource_map
-custom_mapping = FhirSchemaModel.custom_fhir_resource_mapping(custom_mapping).fhir_resource_map
+default_mapping_dict = FhirSchemaModel().fhir_resource_map
+us_core_mapping_dict = FhirSchemaModel.us_core_fhir_resource_mapping().fhir_resource_map
+custom_mapping_dict = FhirSchemaModel.custom_fhir_resource_mapping(custom_mapping).fhir_resource_map
 
 # COMMAND ----------
 
-testing.test_fhir_schema_model_resource_types(default_mapping)
+testing.test_fhir_schema_model_resource_types(default_mapping_dict)
 
 # COMMAND ----------
 
-testing.test_fhir_schema_model_resource_types(us_core_mapping)
+testing.test_fhir_schema_model_resource_types(us_core_mapping_dict)
 
 # COMMAND ----------
 
-testing.test_fhir_schema_model_resource_types(custom_mapping)
+testing.test_fhir_schema_model_resource_types(custom_mapping_dict)
+
+# COMMAND ----------
+
+
