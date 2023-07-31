@@ -3,7 +3,7 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
-pip install git+https://github.com/databricks-industry-solutions/dbignite.git@feature-FHIR-schema-dbignite-HLSSA-294
+pip install git+https://github.com/willsmithDB/dbignite-FHIR@feature-FHIR-schema-dbignite-HLSSA-296
 
 # COMMAND ----------
 
@@ -45,7 +45,13 @@ explicit.select("name").show(truncate=False)
 
 # COMMAND ----------
 
-print(explicit)
+# DBTITLE 1,TODO Bring in DBSQL and Serverless (HEDIS measures?) 
+display(explicit)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ![HEDIS](https://www.ncqa.org/wp-content/uploads/2021/09/the-future-of-HEDIS-768x487.png)
 
 # COMMAND ----------
 
@@ -70,3 +76,12 @@ custom_array_fhir_resource_map = FhirSchemaModel.custom_fhir_resource_mapping(["
 # COMMAND ----------
 
 print(custom_array_fhir_resource_map.list_keys())
+
+# COMMAND ----------
+
+for item in custom_array_fhir_resource_map.list_keys():
+  print(custom_array_fhir_resource_map.schema(item))
+
+# COMMAND ----------
+
+
